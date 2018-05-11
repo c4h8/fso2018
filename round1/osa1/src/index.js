@@ -14,28 +14,38 @@ const App = () => {
     <h1>{props.kurssi}</h1>
   );
 
+  const Osa = (props) => (
+    <p>{props.o} {props.t}</p>
+  );
+
   const Sisalto = (props) => {
-    const {osa2, tehtavia2, osa3, tehtavia3} = props;
     return (
         <div>
-            <p>{osa1} {tehtavia1}</p>
-            <p>{osa2} {tehtavia2}</p>
-            <p>{osa3} {tehtavia3}</p>
+            <Osa o={props.o1} t={props.t1} />
+            <Osa o={props.o2} t={props.t2} />
+            <Osa o={props.o3} t={props.t3} />
         </div>
     );
   };
 
-  const Yhteensa = ({tehtavia1, tehtavia2, tehtavia3}) => (
-    <p>yhteensä {tehtavia1 + tehtavia2 + tehtavia3} tehtävää</p>
+  const Yhteensa = ({t1, t2, t3}) => (
+    <p>yhteensä {t1 + t2 + t3} tehtävää</p>
   );
 
   return (
     <div>
       <Otsikko kurssi={kurssi} />
-      <Sisalto osa2={osa2} osa3={osa3} tehtavia2={tehtavia2} tehtavia3={tehtavia3}/>
+      <Sisalto
+        o1={osa1}
+        o2={osa2}
+        o3={osa3}
+        t1={tehtavia1}
+        t2={tehtavia2}
+        t3={tehtavia3}
+      />
       <Yhteensa {...{tehtavia1, tehtavia2, tehtavia3}} />
     </div>
-  )
+  );
 }
 
 ReactDOM.render(
