@@ -41,34 +41,19 @@ class App extends Component {
     }
   }
 
-  annaHyva = () => {
+  giveVote = (identifier) => () => {
     this.setState((prevState) => ({
-      hyva: prevState.hyva + 1
-    }));
-  }
-
-  annaNeutraali= () => {
-    this.setState((prevState) => ({
-      neutraali: prevState.neutraali + 1
-    }));
-  }
-
-  annaHuono = () => {
-    this.setState((prevState) => ({
-      huono: prevState.huono + 1
+      [identifier]: prevState[identifier] + 1
     }));
   }
 
   render() {
-    // const stats = Object.keys(this.state).map(key)
-    // console.log('entires: ', stats);
-
     return (
       <div className="App">
         <h2>anna palautetta</h2>
-        <Button text={'hyva'} action={this.annaHyva} />
-        <Button text={'neutraali'} action={this.annaNeutraali} />
-        <Button text={'huono'} action={this.annaHuono} />
+        <Button text={'hyva'} action={this.giveVote('hyva')} />
+        <Button text={'neutraali'} action={this.giveVote('neutraali')} />
+        <Button text={'huono'} action={this.giveVote('huono')} />
         <Statistics {...this.state} />
       </div>
     );
