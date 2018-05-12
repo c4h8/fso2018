@@ -7,7 +7,10 @@ const Button = ({text, action}) => (
 );
 
 const Statistic = ({identifier, value}) => (
-  <p>{identifier} {value}</p>
+  <tr>
+    <td>{identifier}</td>
+    <td>{value}</td>
+  </tr>
 )
 
 const Statistics = (props) => {
@@ -22,11 +25,15 @@ const Statistics = (props) => {
   return (
     <div>
       <h2>statistiikka</h2>
-      <Statistic identifier="hyva" value={hyva} />
-      <Statistic identifier="neutraali" value={neutraali} />
-      <Statistic identifier="huono" value={huono} />
-      <Statistic identifier="keskiarvo" value={avg} />
-      <Statistic identifier="positiivisia" value={positivePerc} />
+      <table>
+        <tbody>
+          <Statistic identifier="hyva" value={hyva} />
+          <Statistic identifier="neutraali" value={neutraali} />
+          <Statistic identifier="huono" value={huono} />
+          <Statistic identifier="keskiarvo" value={avg} />
+          <Statistic identifier="positiivisia" value={positivePerc} />
+        </tbody>
+      </table>
     </div>
   );
 };
