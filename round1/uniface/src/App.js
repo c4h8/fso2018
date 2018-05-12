@@ -15,18 +15,23 @@ const Statistics = (props) => {
   const avg = ((hyva - huono) / (hyva + neutraali + huono)).toFixed(1)
   const positivePerc = `${((100 * hyva) / (hyva + neutraali + huono)).toFixed(1)} %`
 
+  if(hyva + neutraali + huono === 0) return (
+    <p>ei yhtäkään palautetta annettu</p>
+  );
+
   return (
-  <div>
-    <h2>statistiikka</h2>
-    <Statistic identifier="hyva" value={hyva} />
-    <Statistic identifier="neutraali" value={neutraali} />
-    <Statistic identifier="huono" value={huono} />
-    <Statistic identifier="keskiarvo" value={avg} />
-    <Statistic identifier="positiivisia" value={positivePerc} />
-  </div>);
+    <div>
+      <h2>statistiikka</h2>
+      <Statistic identifier="hyva" value={hyva} />
+      <Statistic identifier="neutraali" value={neutraali} />
+      <Statistic identifier="huono" value={huono} />
+      <Statistic identifier="keskiarvo" value={avg} />
+      <Statistic identifier="positiivisia" value={positivePerc} />
+    </div>
+  );
 };
 
-class App extends React.Component {
+class App extends Component {
   constructor() {
     super()
     this.state = {
