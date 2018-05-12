@@ -6,14 +6,33 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      selected: 0
+      selected: 0,
+      votes: this.props.anecdotes.map(a => 0)
     }
+  }
+
+  switchAnecdote = () => {
+    this.setState({
+      selected: Math.floor((Math.random() * 0.9999999 * (this.props.anecdotes.length)))
+    });
+  }
+
+  vote = (index) => () => {
+    const newVotes = [...this.state.votes]
+    newVotes[this.state.selected] = newVotes[this.state.selected] + 1
+
+    this.setState({
+      votes: newVotes
+    });
   }
 
   render() {
     return (
       <div>
-        {this.props.anecdotes[this.state.selected]}
+        <p>{this.props.anecdotes[this.state.selected]}</p>
+        <p>has {this.state.votes[this.state.selected]} votes</p>
+        <button onClick={this.vote(this.state.selected)}>vote</button>
+        <button onClick={this.switchAnecdote}>next anecdote</button>
       </div>
     )
   }
