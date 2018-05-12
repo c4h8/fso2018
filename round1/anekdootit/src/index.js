@@ -27,12 +27,18 @@ class App extends React.Component {
   }
 
   render() {
+    let highestIndex = 0
+    this.state.votes.forEach((e, i) => { if(e > this.state.votes[highestIndex]) highestIndex = i })
+
     return (
       <div>
         <p>{this.props.anecdotes[this.state.selected]}</p>
         <p>has {this.state.votes[this.state.selected]} votes</p>
         <button onClick={this.vote(this.state.selected)}>vote</button>
         <button onClick={this.switchAnecdote}>next anecdote</button>
+        <h2>anecdote with most votes</h2>
+        <p>{this.props.anecdotes[highestIndex]}</p>
+        <p>has {this.state.votes[highestIndex]} votes</p>
       </div>
     )
   }
