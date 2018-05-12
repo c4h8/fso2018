@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import registerServiceWorker from './registerServiceWorker';
 
 class App extends React.Component {
   constructor(props) {
@@ -54,4 +53,3 @@ const anecdotes = [
 ]
 
 ReactDOM.render(<App anecdotes={anecdotes}/>, document.getElementById('root'));
-registerServiceWorker();
