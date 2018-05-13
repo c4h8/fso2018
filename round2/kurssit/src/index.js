@@ -15,8 +15,8 @@ const Sisalto = (props) => (
   </div>
 );
 
-const Yhteensa = (props) => {
-  const yht = props.osat.map(o => o.tehtavia).reduce((a,b) => a + b)
+const Yhteensa = ({osat}) => {
+  const yht = (osat.length === 0) ? 0 : osat.map(o => o.tehtavia).reduce((a,b) => a + b)
 
   return (
     <p>yhteensä {yht} tehtävää</p>
@@ -27,7 +27,7 @@ const Kurssi = ({kurssi}) => (
   <div>
     <Otsikko kurssi={kurssi.nimi} />
     <Sisalto osat={kurssi.osat} />
-    {/* <Yhteensa osat={kurssi.osat} /> */}
+    <Yhteensa osat={kurssi.osat} />
   </div>
 );
 
