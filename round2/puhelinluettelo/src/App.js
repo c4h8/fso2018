@@ -17,10 +17,12 @@ class App extends React.Component {
 
   addData = (e) => {
     e.preventDefault();
-    this.setState({
-      persons: this.state.persons.concat({name: this.state.newName}),
-      newName: ''
-    });
+    if(!this.state.persons.map(p => p.name.toLowerCase()).includes(this.state.newName.toLowerCase())) {
+      this.setState({
+        persons: this.state.persons.concat({name: this.state.newName}),
+        newName: ''
+      });
+    }
   }
 
   handleNameChange = (e) => {
