@@ -1,13 +1,17 @@
 import React from 'react';
 
 
-const PersonContainer = ({persons}) => (
-  <table>
-    <tbody>
-      {persons.map((p, i) => <Person {...p} key={i} />)}
-    </tbody>
-  </table>
-);
+const PersonContainer = ({persons, filter}) => {
+  const personsFiltered = persons.filter(p => p.name.toLowerCase().includes(filter.toLowerCase()));
+
+  return (
+    <table>
+      <tbody>
+        {personsFiltered.map((p, i) => <Person {...p} key={i} />)}
+      </tbody>
+    </table>
+  );
+};
 
 const Person = ({name, number}) => (
   <tr>
@@ -55,7 +59,13 @@ class App extends React.Component {
     return (
       <div>
         <h2>Puhelinluettelo</h2>
+        rajaa näytettäviä:
+        <input
+          value={this.state.filter}
+          onChange={this.handleChange('filter')}
+        />
         <form onSubmit={this.addData}>
+          <h2>Lisää uusi</h2>
           <div>
             nimi:
             <input
@@ -75,7 +85,7 @@ class App extends React.Component {
           </div>
         </form>
         <h2>Numerot</h2>
-        <PersonContainer persons={this.state.persons} />
+        <PersonContainer {...this.state} />
       </div>
     )
   }
