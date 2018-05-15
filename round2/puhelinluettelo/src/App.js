@@ -1,7 +1,19 @@
 import React from 'react';
 
-const Person = ({name}) => (
-  <p>{name}</p>
+
+const PersonContainer = ({persons}) => (
+  <table>
+    <tbody>
+      {persons.map((p, i) => <Person {...p} key={i} />)}
+    </tbody>
+  </table>
+);
+
+const Person = ({name, number}) => (
+  <tr>
+    <td>{name}</td>
+    <td>{number}</td>
+  </tr>
 );
 
 class App extends React.Component {
@@ -9,9 +21,14 @@ class App extends React.Component {
     super(props)
     this.state = {
       persons: [
-        { name: 'Arto Hellas' }
+        { name: 'Arto Hellas', number: '040-123456' },
+        { name: 'Martti Tienari', number: '040-123456' },
+        { name: 'Arto Järvinen', number: '040-123456' },
+        { name: 'Lea Kutvonen', number: '040-123456' }
       ],
-      newName: ''
+      newName: '',
+      newNumber: '',
+      filter: ''
     }
   }
 
@@ -19,15 +36,19 @@ class App extends React.Component {
     e.preventDefault();
     if(!this.state.persons.map(p => p.name.toLowerCase()).includes(this.state.newName.toLowerCase())) {
       this.setState({
-        persons: this.state.persons.concat({name: this.state.newName}),
-        newName: ''
+        persons: this.state.persons.concat({
+          name: this.state.newName,
+          number: this.state.newNumber
+        }),
+        newName: '',
+        newNumber: ''
       });
     }
   }
 
-  handleNameChange = (e) => {
+  handleChange = (target) => (e) => {
     e.preventDefault();
-    this.setState({newName: e.target.value});
+    this.setState({[target]: e.target.value});
   }
 
   render() {
@@ -39,7 +60,14 @@ class App extends React.Component {
             nimi:
             <input
               value={this.state.newName}
-              onChange={this.handleNameChange}
+              onChange={this.handleChange('newName')}
+            />
+          </div>
+          <div>
+            numero:
+            <input
+              value={this.state.newNumber}
+              onChange={this.handleChange('newNumber')}
             />
           </div>
           <div>
@@ -47,7 +75,7 @@ class App extends React.Component {
           </div>
         </form>
         <h2>Numerot</h2>
-        {this.state.persons.map((p, i) => <Person {...p} key={i}/> )}
+        <PersonContainer persons={this.state.persons} />
       </div>
     )
   }
