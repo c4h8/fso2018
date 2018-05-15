@@ -1,17 +1,55 @@
 import React from 'react';
 
+const SetFilter = ({that}) => (
+  <div>
+    rajaa näytettäviä:
+    <input
+      value={that.state.filter}
+      onChange={that.handleChange('filter')}
+    />
+  </div>
+);
+
+
+const AddPersonForm = ({that}) => (
+  <form onSubmit={that.addData}>
+    <h2>Lisää uusi</h2>
+    <div>
+      nimi:
+      <input
+        value={that.state.newName}
+        onChange={that.handleChange('newName')}
+      />
+    </div>
+    <div>
+      numero:
+      <input
+        value={that.state.newNumber}
+        onChange={that.handleChange('newNumber')}
+      />
+    </div>
+    <div>
+      <button type="submit">lisää</button>
+    </div>
+  </form>
+);
+
 
 const PersonContainer = ({persons, filter}) => {
   const personsFiltered = persons.filter(p => p.name.toLowerCase().includes(filter.toLowerCase()));
 
   return (
-    <table>
-      <tbody>
-        {personsFiltered.map((p, i) => <Person {...p} key={i} />)}
-      </tbody>
-    </table>
+    <div>
+      <h2>Numerot</h2>
+      <table>
+        <tbody>
+          {personsFiltered.map((p, i) => <Person {...p} key={i} />)}
+        </tbody>
+      </table>
+    </div>
   );
 };
+
 
 const Person = ({name, number}) => (
   <tr>
@@ -19,6 +57,7 @@ const Person = ({name, number}) => (
     <td>{number}</td>
   </tr>
 );
+
 
 class App extends React.Component {
   constructor(props) {
@@ -59,32 +98,8 @@ class App extends React.Component {
     return (
       <div>
         <h2>Puhelinluettelo</h2>
-        rajaa näytettäviä:
-        <input
-          value={this.state.filter}
-          onChange={this.handleChange('filter')}
-        />
-        <form onSubmit={this.addData}>
-          <h2>Lisää uusi</h2>
-          <div>
-            nimi:
-            <input
-              value={this.state.newName}
-              onChange={this.handleChange('newName')}
-            />
-          </div>
-          <div>
-            numero:
-            <input
-              value={this.state.newNumber}
-              onChange={this.handleChange('newNumber')}
-            />
-          </div>
-          <div>
-            <button type="submit">lisää</button>
-          </div>
-        </form>
-        <h2>Numerot</h2>
+        <SetFilter that={this} />
+        <AddPersonForm that={this} />
         <PersonContainer {...this.state} />
       </div>
     )
