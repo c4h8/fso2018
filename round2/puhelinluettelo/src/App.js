@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios'
 
 const SetFilter = ({that}) => (
   <div>
@@ -63,16 +64,18 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      persons: [
-        { name: 'Arto Hellas', number: '040-123456' },
-        { name: 'Martti Tienari', number: '040-123456' },
-        { name: 'Arto Järvinen', number: '040-123456' },
-        { name: 'Lea Kutvonen', number: '040-123456' }
-      ],
       newName: '',
       newNumber: '',
       filter: ''
     }
+  }
+
+  componentDidMount() {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(res => {
+        this.setState({persons: res.data});
+      })
   }
 
   addData = (e) => {
@@ -95,6 +98,8 @@ class App extends React.Component {
   }
 
   render() {
+    if(!this.state.persons) return (<div>no data</div>);
+
     return (
       <div>
         <h2>Puhelinluettelo</h2>
