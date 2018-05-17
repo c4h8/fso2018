@@ -14,13 +14,13 @@ const CountryDetails = ({country}) => (
   </div>
 )
 
-const CountryListing = ({country}) => (
-  <div>
+const CountryListing = ({country, that}) => (
+  <div onClick={() => that.setValue('filter', country.name)}>
     {country.name}
   </div>
 )
 
-const CountryList = ({countries, filter}) => {
+const CountryList = ({countries, filter, that}) => {
   const regex = RegExp(`^${filter}`, 'i');
   const countiresFiltered = countries.filter(c => regex.test(c.name));
 
@@ -32,7 +32,7 @@ const CountryList = ({countries, filter}) => {
 
   return (
     <div>
-      {countiresFiltered.map((c, i) => <CountryListing country={c} key={i} />)}
+      {countiresFiltered.map((c, i) => <CountryListing country={c} key={i} that={that} />)}
     </div>);
 }
 
@@ -65,6 +65,8 @@ class App extends Component {
     this.setState({[target]: e.target.value});
   }
 
+  setValue = (target, value) => this.setState({[target]: value})
+
   render() {
     if(!this.state.countries)
       return(<div>no data</div>)
@@ -72,7 +74,7 @@ class App extends Component {
     return (
       <div>
         <CountryFilter that={this} />
-        <CountryList countries={this.state.countries} filter={this.state.filter} />
+        <CountryList countries={this.state.countries} filter={this.state.filter} that={this} />
       </div>)
   }
 }
