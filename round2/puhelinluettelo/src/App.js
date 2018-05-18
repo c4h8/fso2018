@@ -36,7 +36,7 @@ const AddPersonForm = ({that}) => (
 );
 
 
-const PersonContainer = ({persons, filter}) => {
+const PersonContainer = ({persons, filter, that}) => {
   const personsFiltered = persons.filter(p => p.name.toLowerCase().includes(filter.toLowerCase()));
 
   return (
@@ -44,7 +44,7 @@ const PersonContainer = ({persons, filter}) => {
       <h2>Numerot</h2>
       <table>
         <tbody>
-          {personsFiltered.map((p, i) => <Person {...p} key={i} />)}
+          {personsFiltered.map((p, i) => <Person {...p} key={i} that={that} />)}
         </tbody>
       </table>
     </div>
@@ -52,10 +52,13 @@ const PersonContainer = ({persons, filter}) => {
 };
 
 
-const Person = ({name, number}) => (
+const Person = ({id, name, number, that}) => (
   <tr>
     <td>{name}</td>
     <td>{number}</td>
+    <td>
+      <button onClick={that.deletePerson(id)}>delete</button>
+    </td>
   </tr>
 );
 
@@ -79,21 +82,46 @@ class App extends React.Component {
 
   addData = (e) => {
     e.preventDefault();
-    if(!this.state.persons.map(p => p.name.toLowerCase()).includes(this.state.newName.toLowerCase())) {
-      const newPerson = {
-        name: this.state.newName,
-        number: this.state.newNumber
-      };
+
+    const newPerson = {
+      name: this.state.newName,
+      number: this.state.newNumber
+    };
+
+    const existingPerson = this.state.persons
+      .find(p => p.name.toLowerCase() === this.state.newName.toLowerCase())
+
+    if(!existingPerson) {
       service.postPerson(newPerson)
       .then(res => {
-        console.log(res.data)
         this.setState({
           persons: this.state.persons.concat(res.data),
           newName: '',
           newNumber: ''
         });
       });
+    } else {
+      const confirm = window.confirm('Henkilö on jo luettelossa. Päivitetäänkö tiedot?');
+      if(confirm) {
+        service.modifyPerson(existingPerson.id, {...existingPerson, ...newPerson})
+        .then(res => {
+          this.setState({
+            persons: this.state.persons.filter(p => p.id !== existingPerson.id).concat(res.data),
+            newName: '',
+            newNumber: ''
+          });
+        })
+      }
     }
+  }
+
+  deletePerson = (id) => () => {
+    service.deletePerson(id)
+    .then(res => {
+      this.setState({
+        persons: this.state.persons.filter(p => p.id !== id)
+      });
+    })
   }
 
   handleChange = (target) => (e) => {
@@ -109,7 +137,7 @@ class App extends React.Component {
         <h2>Puhelinluettelo</h2>
         <SetFilter that={this} />
         <AddPersonForm that={this} />
-        <PersonContainer {...this.state} />
+        <PersonContainer {...this.state} that={this}/>
       </div>
     )
   }
