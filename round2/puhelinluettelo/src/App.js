@@ -81,14 +81,20 @@ class App extends React.Component {
   addData = (e) => {
     e.preventDefault();
     if(!this.state.persons.map(p => p.name.toLowerCase()).includes(this.state.newName.toLowerCase())) {
-      this.setState({
-        persons: this.state.persons.concat({
-          name: this.state.newName,
-          number: this.state.newNumber
-        }),
-        newName: '',
-        newNumber: ''
-      });
+      const newPerson = {
+        name: this.state.newName,
+        number: this.state.newNumber
+      };
+      axios
+        .post('http://localhost:3001/persons', newPerson)
+        .then(res => {
+          console.log(res.data)
+          this.setState({
+            persons: this.state.persons.concat(res.data),
+            newName: '',
+            newNumber: ''
+          });
+        });
     }
   }
 
