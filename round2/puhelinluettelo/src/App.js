@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios'
+import service from './service.js'
 
 const SetFilter = ({that}) => (
   <div>
@@ -71,11 +71,10 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(res => {
-        this.setState({persons: res.data});
-      })
+    service.getPersons()
+    .then(res => {
+      this.setState({persons: res.data});
+    })
   }
 
   addData = (e) => {
@@ -85,16 +84,15 @@ class App extends React.Component {
         name: this.state.newName,
         number: this.state.newNumber
       };
-      axios
-        .post('http://localhost:3001/persons', newPerson)
-        .then(res => {
-          console.log(res.data)
-          this.setState({
-            persons: this.state.persons.concat(res.data),
-            newName: '',
-            newNumber: ''
-          });
+      service.postPerson(newPerson)
+      .then(res => {
+        console.log(res.data)
+        this.setState({
+          persons: this.state.persons.concat(res.data),
+          newName: '',
+          newNumber: ''
         });
+      });
     }
   }
 
