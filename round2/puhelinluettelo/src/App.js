@@ -97,7 +97,7 @@ class App extends React.Component {
     })
   }
 
-  setNotification = (payload, style={}) => () => {
+  setNotification = (payload, style={}) => {
     this.setState({error: payload, errorStyle: style});
     setTimeout(() => this.setState({error: '', errorStyle: {}}), 5000);
   };
@@ -121,7 +121,7 @@ class App extends React.Component {
           newName: '',
           newNumber: ''
         });
-        this.setNotification(`lisättiin henkilö ${newPerson.name}`)()
+        this.setNotification(`lisättiin henkilö ${newPerson.name}`);
       });
     } else {
       const confirm = window.confirm('Henkilö on jo luettelossa. Päivitetäänkö tiedot?');
@@ -133,8 +133,22 @@ class App extends React.Component {
             newName: '',
             newNumber: ''
           });
-          this.setNotification(`päivitettiin henkilö ${newPerson.name}`)()
+          this.setNotification(`päivitettiin henkilö ${newPerson.name}`);
         })
+        .catch(res => {
+          const confirm2 = window.confirm('Henkilöä ei löydetty. Lisätäänkö henkilö?');
+          if(confirm2) {
+            service.postPerson(newPerson)
+            .then(res2 => {
+              this.setState({
+                persons: this.state.persons.filter(p => p.id !== existingPerson.id).concat(res2.data),
+                newName: '',
+                newNumber: ''
+              });
+              this.setNotification(`lisättiin henkilö ${newPerson.name}`);
+            });
+          };
+        });
       }
     }
   }
@@ -145,7 +159,7 @@ class App extends React.Component {
       this.setState({
         persons: this.state.persons.filter(p => p.id !== id)
       });
-      this.setNotification(`poistettiin henkilö`, {backgroundColor: 'rgb(255, 200, 200)'})()
+      this.setNotification(`poistettiin henkilö`, {backgroundColor: 'rgb(255, 200, 200)'});
     })
   }
 
