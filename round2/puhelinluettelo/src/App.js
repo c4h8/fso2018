@@ -62,6 +62,21 @@ const Person = ({id, name, number, that}) => (
   </tr>
 );
 
+const NotificationContainer = ({payload, style={}}) => {
+  const defaultStyle = {
+    padding: '5px 20px 5px 20px',
+    backgroundColor: 'rgb(200,255,200)'
+  };
+
+  if(payload === '') return([]);
+
+  return (
+    <div style={{...defaultStyle, ...style}}> 
+      {payload}
+    </div>
+  );
+};
+
 
 class App extends React.Component {
   constructor(props) {
@@ -69,7 +84,9 @@ class App extends React.Component {
     this.state = {
       newName: '',
       newNumber: '',
-      filter: ''
+      filter: '',
+      error: '',
+      errorStyle: ''
     }
   }
 
@@ -79,6 +96,11 @@ class App extends React.Component {
       this.setState({persons: res.data});
     })
   }
+
+  setNotification = (payload, style={}) => () => {
+    this.setState({error: payload, errorStyle: style});
+    setTimeout(() => this.setState({error: '', errorStyle: {}}), 5000);
+  };
 
   addData = (e) => {
     e.preventDefault();
@@ -99,6 +121,7 @@ class App extends React.Component {
           newName: '',
           newNumber: ''
         });
+        this.setNotification(`lisättiin henkilö ${newPerson.name}`)()
       });
     } else {
       const confirm = window.confirm('Henkilö on jo luettelossa. Päivitetäänkö tiedot?');
@@ -110,6 +133,7 @@ class App extends React.Component {
             newName: '',
             newNumber: ''
           });
+          this.setNotification(`päivitettiin henkilö ${newPerson.name}`)()
         })
       }
     }
@@ -121,6 +145,7 @@ class App extends React.Component {
       this.setState({
         persons: this.state.persons.filter(p => p.id !== id)
       });
+      this.setNotification(`poistettiin henkilö`, {backgroundColor: 'rgb(255, 200, 200)'})()
     })
   }
 
@@ -135,6 +160,7 @@ class App extends React.Component {
     return (
       <div>
         <h2>Puhelinluettelo</h2>
+        <NotificationContainer payload={this.state.error} style={this.state.errorStyle} />
         <SetFilter that={this} />
         <AddPersonForm that={this} />
         <PersonContainer {...this.state} that={this}/>

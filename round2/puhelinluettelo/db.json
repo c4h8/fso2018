@@ -24,6 +24,21 @@
       "name": "aku ankka",
       "number": "123321123",
       "id": 7
+    },
+    {
+      "name": "timppa",
+      "number": "4",
+      "id": 8
+    },
+    {
+      "name": "tomppa",
+      "number": "2",
+      "id": 9
+    },
+    {
+      "name": "tombs",
+      "number": "213124124534",
+      "id": 12
     }
   ]
 }
